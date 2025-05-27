@@ -1,18 +1,20 @@
 from Regression import MyLinearRegression, my_train_test_split
 
-loaded_model = MyLinearRegression.load('weather_model.json')
+loaded_model = MyLinearRegression.load('Max_Temp.json')
 
 # Example prediction using loaded model
-new_data = [[15.0, 65.0, 1012.0, 2.0, 20.0]]
+new_data = [[28.5,24.0,1014.8,0.0,14.6]]
 prediction = loaded_model.predict(new_data)
 print(f"Predicted temperature: {prediction[0]:.1f}°C")
 
 # Example predictions using trained model
 test_samples = [
-    ([15.0, 65.0, 1012.0, 2.0, 20.0], "T1"),
-    ([20.0, 60.0, 1010.0, 5.0, 25.0], "T2"),
-    ([25.0, 55.0, 1008.0, 10.0, 30.0], "T3"),
-    ([18.0, 70.0, 1011.0, 0.0, 12.0], "T4"),
+    ([27.7, 20.0, 1000.5, 0.0, 14.8], "T1"),
+    ([26.9, 21.0, 999.6, 0.0, 14.6], "T2"),
+    ([29.4, 26.0, 1000.0, 0.0, 26.0], "T3"),
+    ([28.6, 37.0, 1000.3, 0.0, 26.9], "T4"),
+    ([25.4, 46.0, 1002.0, 3.0, 33.1], "T5"),
+    ([22.7, 44.0, 1005.1, 0.0, 11.1], "T6")
 ]
 
 for features, label in test_samples:

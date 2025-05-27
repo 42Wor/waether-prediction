@@ -2,16 +2,16 @@ from Regression import MyLinearRegression, my_train_test_split
 import pandas as pd
 
 # Load data
-d = pd.read_csv("data/weather_daily_2020-03-26_to_2025-05-24.csv")
+d = pd.read_csv("../data/weather_daily_2020-03-26_to_2025-05-24.csv")
 
 # Prepare features and target
-x = d[['Min Temperature (°C)',
+x = d[['Max Temperature (°C)',
        'Humidity (%)',
        'Pressure (hPa)',
        'Precipitation (mm)',
        'Wind Speed (km/h)']]
 
-y = d['Max Temperature (°C)']  # Use single brackets for Series
+y = d['Min Temperature (°C)']  # Use single brackets for Series
 
 # Split data
 x_train, x_test, y_train, y_test = my_train_test_split(
@@ -24,5 +24,5 @@ mlr.fit(x_train, y_train)
 print("R² score:", mlr.score(x_test, y_test))
 
 # Save model
-mlr.save('weather_model.json')
+mlr.save('Min_Temp.json')
 

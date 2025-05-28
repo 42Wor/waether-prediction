@@ -10,7 +10,7 @@ Pressure_model = MyLinearRegression.load('json/Pressure.json')
 Wind_model = MyLinearRegression.load('json/Wind Speed.json')
 
 # Initial weather data [Max_Temp, Min_Temp, Humidity, Pressure, Precipitation, Wind]
-current = [38.8, 28.5, 24.0, 1014.8, 0.0, 14.6]
+current = [40.4,27.7,20.0,1000.5,0.0,14.8]
 new_prediction = []
 
 # Lists to store predictions for each day

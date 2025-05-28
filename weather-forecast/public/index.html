@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7-Day Weather Forecast</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="dark-theme">
+  <button class="theme-toggle" id="themeToggle">
+    <i class="fas fa-moon"></i>
+    <span>Dark Mode</span>
+  </button>
+
+  <div class="container">
+    <h1>7-Day Weather Forecast</h1>
+
+    <div class="weather-cards">
+      <div class="weather-card" id="day1">
+        <h2>Day 1</h2>
+        <div class="weather-data">
+          <div class="weather-item">
+            <span class="label">Max Temp:</span>
+            <span class="value" id="max-temp-1">--</span>
+          </div>
+          <div class="weather-item">
+            <span class="label">Min Temp:</span>
+            <span class="value" id="min-temp-1">--</span>
+          </div>
+          <div class="weather-item">
+            <span class="label">Humidity:</span>
+            <span class="value" id="humidity-1">--</span>
+          </div>
+          <div class="weather-item">
+            <span class="label">Pressure:</span>
+            <span class="value" id="pressure-1">--</span>
+          </div>
+          <div class="weather-item">
+            <span class="label">Precipitation:</span>
+            <span class="value" id="precip-1">--</span>
+          </div>
+          <div class="weather-item">
+            <span class="label">Wind:</span>
+            <span class="value" id="wind-1">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Days 2-7 will be generated dynamically -->
+    </div>
+
+    <div class="chart-container">
+      <canvas id="temperature-chart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="humidity-chart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="pressure-chart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="precipitation-chart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="wind-chart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="combined-chart"></canvas>
+    </div>
+  </div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -144,7 +144,7 @@ async function loadModelsAndPredict() {
         models.wind.load(modelData[5]);
 
         // Initial weather data [Max_Temp, Min_Temp, Humidity, Pressure, Precipitation, Wind]
-        let current = [38.8, 28.5, 24.0, 1014.8, 0.0, 14.6];
+        let current = [40.4,27.7,20.0,1000.5,0.0,14.8];
         const predictions = [];
 
         // Predict for 7 days

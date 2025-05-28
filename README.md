@@ -19,3 +19,10 @@
   - Pressure  
   - WindSpeed
 
+# Website
+```
+git clone https://github.com/42Wor/waether-prediction.git
+cd waether-prediction
+npm install express
+node server.js
+```

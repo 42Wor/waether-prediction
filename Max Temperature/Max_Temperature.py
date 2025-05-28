@@ -3,7 +3,7 @@ import pandas as pd
 
 # Load data
 d = pd.read_csv("../data/weather_daily_2020-03-26_to_2025-05-24.csv")
-
+print(d.columns)
 # Prepare features and target
 x = d[['Min Temperature (°C)',
        'Humidity (%)',
@@ -24,5 +24,5 @@ mlr.fit(x_train, y_train)
 print("R² score:", mlr.score(x_test, y_test))
 
 # Save model
-mlr.save('Max_Temp.json')
+mlr.save('../json/Max_Temp.json')
 

@@ -1,6 +1,6 @@
 from Regression import MyLinearRegression, my_train_test_split
 
-loaded_model = MyLinearRegression.load('Max_Temp.json')
+loaded_model = MyLinearRegression.load('../json/Max_Temp.json')
 
 # Example prediction using loaded model
 new_data = [[28.5,24.0,1014.8,0.0,14.6]]

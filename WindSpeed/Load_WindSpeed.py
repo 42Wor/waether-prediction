@@ -1,6 +1,6 @@
 from Regression import MyLinearRegression, my_train_test_split
 
-loaded_model = MyLinearRegression.load('Wind Speed.json')
+loaded_model = MyLinearRegression.load('../json/Wind Speed.json')
 
 # Example prediction using loaded model
 new_data = [[38.8,28.5,24.0,1014.8,0.0]]

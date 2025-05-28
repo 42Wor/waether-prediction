@@ -1,11 +1,12 @@
 from Regression import MyLinearRegression, my_train_test_split
 
-loaded_model = MyLinearRegression.load('Precipitation.json')
+loaded_model = MyLinearRegression.load('../json/Precipitation.json')
 
 # Example prediction using loaded model
 new_data = [[38.8,28.5,24.0,1014.8,14.6]]
 prediction = loaded_model.predict(new_data)
-print(f"Predicted : {prediction[0]:.1f} mm")
+prediction_value = max(0.0, prediction[0])
+print(f"Predicted : {prediction_value:.1f} mm")
 
 # Example predictions using trained model
 test_samples = [
@@ -22,4 +23,5 @@ test_samples = [
 
 for features, label in test_samples:
     predicted = loaded_model.predict([features])
-    print(f"{label} Predicted  {predicted[0]:.1f} mm")
+    value = max(0.0, predicted[0])
+    print(f"{label} Predicted  {value:.1f} mm")

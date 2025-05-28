@@ -25,5 +25,5 @@ mlr.fit(x_train, y_train)
 print("R² score:", mlr.score(x_test, y_test))
 
 # Save model
-mlr.save('Wind Speed.json')
+mlr.save('../json/Wind Speed.json')
 

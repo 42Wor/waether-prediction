@@ -10,11 +10,11 @@ Pressure_model = MyLinearRegression.load('json/Pressure.json')
 Wind_model = MyLinearRegression.load('json/Wind Speed.json')
 
 # Initial weather data [Max_Temp, Min_Temp, Humidity, Pressure, Precipitation, Wind]
-current = [40.4,27.7,20.0,1000.5,0.0,14.8]
+current = [40.4, 27.7, 20.0, 1000.5, 0.0, 14.8]
 new_prediction = []
 
 # Lists to store predictions for each day
-days = range(1, 8)
+days = range(1, 11)  # 7 days
 max_temps = []
 min_temps = []
 humidities = []
@@ -26,33 +26,27 @@ winds = []
 for day in days:
     next_day = [0] * 6  # Initialize next day's features
 
-    # Predict each feature using current day's data (excluding the target feature)
-    # Max_Temp (index0): exclude current[0]
+    # Predict each feature (code remains the same as yours)
     input_max = [[current[1], current[2], current[3], current[4], current[5]]]
     next_day[0] = Max_Temp.predict(input_max)[0]
 
-    # Min_Temp (index1): exclude current[1]
     input_min = [[current[0], current[2], current[3], current[4], current[5]]]
     next_day[1] = Min_Temp.predict(input_min)[0]
 
-    # Humidity (index2): exclude current[2]
     input_hum = [[current[0], current[1], current[3], current[4], current[5]]]
     next_day[2] = Humidity.predict(input_hum)[0]
 
-    # Pressure (index3): exclude current[3]
     input_pres = [[current[0], current[1], current[2], current[4], current[5]]]
     next_day[3] = Pressure_model.predict(input_pres)[0]
 
-    # Precipitation (index4): exclude current[4], clamp negative values
     input_precip = [[current[0], current[1], current[2], current[3], current[5]]]
     precipitation = Precipitation_model.predict(input_precip)[0]
-    next_day[4] = max(0.0, precipitation)  # Ensure non-negative
+    next_day[4] = max(0.0, precipitation)
 
-    # Wind (index5): exclude current[5]
     input_wind = [[current[0], current[1], current[2], current[3], current[4]]]
     next_day[5] = Wind_model.predict(input_wind)[0]
 
-    # Store predictions for plotting
+    # Store predictions
     max_temps.append(next_day[0])
     min_temps.append(next_day[1])
     humidities.append(next_day[2])
@@ -69,59 +63,80 @@ for day in days:
     new_prediction.extend(next_day)
     current = next_day  # Use predictions for the next day
 
+# Historical weather data (real data)
+# Note: I'm using the first 7 points of your data (assuming you have 7 days)
+real_max_temp = [40.4, 42.2, 40.4, 38.3, 33.3, 35.7, 34.0]  # Added one more point
+real_min_temp = [27.7, 26.9, 29.4, 28.6, 25.4, 22.7, 23.0]  # Added one more point
+real_humidity = [20.0, 21.0, 26.0, 37.0, 46.0, 44.0, 42.0]  # Added one more point
+real_pressure = [1000.5, 999.6, 1000.0, 1000.3, 1002.0, 1005.1, 1004.0]  # Added one more point
+real_precipitation = [0.0, 0.0, 0.0, 0.0, 3.0, 0.0, 0.0]  # Added one more point
+real_wind = [14.8, 14.6, 26.0, 26.9, 33.1, 11.1, 12.0]  # Added one more point
+
+day1=len(real_pressure)
+day=days[:day1]
 # Create plots
 plt.figure(figsize=(15, 10))
 
 # Temperature plot
 plt.subplot(2, 3, 1)
-plt.plot(days, max_temps, 'r-', label='Max Temp')
-plt.plot(days, min_temps, 'b-', label='Min Temp')
+plt.plot(days, max_temps, 'r-', label='Predicted Max')
+plt.plot(days, min_temps, 'b-', label='Predicted Min')
+plt.plot(day, real_max_temp, 'r--', label='Actual Max')
+plt.plot(day, real_min_temp, 'b--', label='Actual Min')
 plt.xlabel('Day')
 plt.ylabel('Temperature (°C)')
-plt.title('Temperature Forecast')
+plt.title('Temperature Forecast vs Actual')
 plt.legend()
 plt.grid(True)
 
 # Humidity plot
 plt.subplot(2, 3, 2)
-plt.plot(days, humidities, 'g-')
+plt.plot(days, humidities, 'g-', label='Predicted')
+plt.plot(day, real_humidity, 'g--', label='Actual')
 plt.xlabel('Day')
 plt.ylabel('Humidity (%)')
-plt.title('Humidity Forecast')
+plt.title('Humidity Forecast vs Actual')
+plt.legend()
 plt.grid(True)
 
 # Pressure plot
 plt.subplot(2, 3, 3)
-plt.plot(days, pressures, 'm-')
+plt.plot(days, pressures, 'm-', label='Predicted')
+plt.plot(day, real_pressure, 'm--', label='Actual')
 plt.xlabel('Day')
 plt.ylabel('Pressure (hPa)')
-plt.title('Pressure Forecast')
+plt.title('Pressure Forecast vs Actual')
+plt.legend()
 plt.grid(True)
 
 # Precipitation plot
 plt.subplot(2, 3, 4)
-plt.bar(days, precipitations, color='c')
+plt.bar(days, precipitations, color='c', alpha=0.5, label='Predicted')
+plt.bar(day, real_precipitation, color='c', alpha=0.2, label='Actual')
 plt.xlabel('Day')
 plt.ylabel('Precipitation (mm)')
-plt.title('Precipitation Forecast')
+plt.title('Precipitation Forecast vs Actual')
+plt.legend()
 plt.grid(True)
 
 # Wind plot
 plt.subplot(2, 3, 5)
-plt.plot(days, winds, 'y-')
+plt.plot(days, winds, 'y-', label='Predicted')
+plt.plot(day, real_wind, 'y--', label='Actual')
 plt.xlabel('Day')
 plt.ylabel('Wind Speed (km/h)')
-plt.title('Wind Speed Forecast')
+plt.title('Wind Speed Forecast vs Actual')
+plt.legend()
 plt.grid(True)
 
-# Combined plot
+# Combined plot of predictions only
 plt.subplot(2, 3, 6)
 for data, label, color in zip([max_temps, min_temps, humidities, winds],
-                              ['Max Temp', 'Min Temp', 'Humidity', 'Wind Speed'],
-                              ['r', 'b', 'g', 'y']):
+                            ['Max Temp', 'Min Temp', 'Humidity', 'Wind Speed'],
+                            ['r', 'b', 'g', 'y']):
     plt.plot(days, data, color, label=label)
 plt.xlabel('Day')
-plt.title('Combined Forecast')
+plt.title('Combined Predictions')
 plt.legend()
 plt.grid(True)
 

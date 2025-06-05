@@ -64,13 +64,12 @@ for day in days:
     current = next_day  # Use predictions for the next day
 
 # Historical weather data (real data)
-# Note: I'm using the first 7 points of your data (assuming you have 7 days)
-real_max_temp = [40.4, 42.2, 40.4, 38.3, 33.3, 35.7, 34.0]  # Added one more point
-real_min_temp = [27.7, 26.9, 29.4, 28.6, 25.4, 22.7, 23.0]  # Added one more point
-real_humidity = [20.0, 21.0, 26.0, 37.0, 46.0, 44.0, 42.0]  # Added one more point
-real_pressure = [1000.5, 999.6, 1000.0, 1000.3, 1002.0, 1005.1, 1004.0]  # Added one more point
-real_precipitation = [0.0, 0.0, 0.0, 0.0, 3.0, 0.0, 0.0]  # Added one more point
-real_wind = [14.8, 14.6, 26.0, 26.9, 33.1, 11.1, 12.0]  # Added one more point
+real_max_temp = [40.4, 42.2, 40.4, 38.3, 33.3, 35.7]  
+real_min_temp = [27.7, 26.9, 29.4, 28.6, 25.4, 22.7]  
+real_humidity = [20.0, 21.0, 26.0, 37.0, 46.0, 44.0]  
+real_pressure = [1000.5, 999.6, 1000.0, 1000.3, 1002.0, 1005.1]  
+real_precipitation = [0.0, 0.0, 0.0, 0.0, 3.0, 0.0]  
+real_wind = [14.8, 14.6, 26.0, 26.9, 33.1, 11.1]  
 
 day1=len(real_pressure)
 day=days[:day1]

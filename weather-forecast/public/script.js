@@ -80,22 +80,14 @@ const weatherCardsContainer = document.querySelector('.weather-cards');
 const days = [1, 2, 3, 4, 5, 6, 7];
 
 // Weather parameters
-const weatherParams = [{id: 'max-temp', name: 'Max Temp', unit: '°C', color: '#e74c3c'}, {
-    id: 'min-temp',
-    name: 'Min Temp',
-    unit: '°C',
-    color: '#3498db'
-}, {id: 'humidity', name: 'Humidity', unit: '%', color: '#2ecc71'}, {
-    id: 'pressure',
-    name: 'Pressure',
-    unit: 'hPa',
-    color: '#9b59b6'
-}, {id: 'precip', name: 'Precipitation', unit: 'mm', color: '#1abc9c'}, {
-    id: 'wind',
-    name: 'Wind Speed',
-    unit: 'km/h',
-    color: '#f39c12'
-}];
+const weatherParams = [
+    {id: 'max-temp', name: 'Max Temp', unit: '°C', color: '#e74c3c'},
+    {id: 'min-temp', name: 'Min Temp', unit: '°C', color: '#3498db'},
+    {id: 'humidity', name: 'Humidity', unit: '%', color: '#2ecc71'},
+    {id: 'pressure', name: 'Pressure', unit: 'hPa', color: '#9b59b6'},
+    {id: 'precip', name: 'Precipitation', unit: 'mm', color: '#1abc9c'},
+    {id: 'wind', name: 'Wind Speed', unit: 'km/h', color: '#f39c12'}
+];
 
 // Create weather cards for days 2-7
 for (let i = 1; i < 7; i++) {
@@ -133,7 +125,14 @@ async function loadModelsAndPredict() {
         };
 
         // Fetch model data
-        const modelData = await Promise.all([fetch('/json/Max_Temp.json').then(res => res.json()), fetch('/json/Min_Temp.json').then(res => res.json()), fetch('/json/Humidity.json').then(res => res.json()), fetch('/json/Precipitation.json').then(res => res.json()), fetch('/json/Pressure.json').then(res => res.json()), fetch('/json/Wind Speed.json').then(res => res.json())]);
+        const modelData = await Promise.all([
+            fetch('/json/Max_Temp.json').then(res => res.json()),
+            fetch('/json/Min_Temp.json').then(res => res.json()),
+            fetch('/json/Humidity.json').then(res => res.json()),
+            fetch('/json/Precipitation.json').then(res => res.json()),
+            fetch('/json/Pressure.json').then(res => res.json()),
+            fetch('/json/Wind Speed.json').then(res => res.json())
+        ]);
 
         // Initialize models with fetched data
         models.maxTemp.load(modelData[0]);
@@ -144,7 +143,7 @@ async function loadModelsAndPredict() {
         models.wind.load(modelData[5]);
 
         // Initial weather data [Max_Temp, Min_Temp, Humidity, Pressure, Precipitation, Wind]
-        let current = [40.4,27.7,20.0,1000.5,0.0,14.8];
+        let current = [40.4, 27.7, 20.0, 1000.5, 0.0, 14.8];
         const predictions = [];
 
         // Predict for 7 days
@@ -153,27 +152,27 @@ async function loadModelsAndPredict() {
 
             // Predict each feature
             // Max_Temp (index0): exclude current[0]
-            input_max = [current[1], current[2], current[3], current[4], current[5]];
+            const input_max = [current[1], current[2], current[3], current[4], current[5]];
             nextDay[0] = models.maxTemp.predict(input_max);
 
             // Min_Temp (index1): exclude current[1]
-            input_min = [current[0], current[2], current[3], current[4], current[5]];
+            const input_min = [current[0], current[2], current[3], current[4], current[5]];
             nextDay[1] = models.minTemp.predict(input_min);
 
             // Humidity (index2): exclude current[2]
-            input_hum = [current[0], current[1], current[3], current[4], current[5]];
+            const input_hum = [current[0], current[1], current[3], current[4], current[5]];
             nextDay[2] = models.humidity.predict(input_hum);
 
             // Pressure (index3): exclude current[3]
-            input_pres = [current[0], current[1], current[2], current[4], current[5]];
+            const input_pres = [current[0], current[1], current[2], current[4], current[5]];
             nextDay[3] = models.pressure.predict(input_pres);
 
             // Precipitation (index4): exclude current[4], clamp negative values
-            input_precip = [current[0], current[1], current[2], current[3], current[5]];
+            const input_precip = [current[0], current[1], current[2], current[3], current[5]];
             nextDay[4] = Math.max(0.0, models.precipitation.predict(input_precip));
 
             // Wind (index5): exclude current[5]
-            input_wind = [current[0], current[1], current[2], current[3], current[4]];
+            const input_wind = [current[0], current[1], current[2], current[3], current[4]];
             nextDay[5] = models.wind.predict(input_wind);
 
             // Update UI for this day
@@ -203,6 +202,14 @@ function updateWeatherCard(day, data) {
     });
 }
 
+// Historical weather data arrays
+const max_tem = [40.4, 42.2, 40.4, 38.3, 33.3, 35.7];
+const min_tem = [27.7, 26.9, 29.4, 28.6, 25.4, 22.7];
+const humidity = [20.0, 21.0, 26.0, 37.0, 46.0, 44.0];
+const pressure = [1000.5, 999.6, 1000.0, 1000.3, 1002.0, 1005.1];
+const precipitation = [0.0, 0.0, 0.0, 0.0, 3.0, 0.0];
+const wind_speed = [14.8, 14.6, 26.0, 26.9, 33.1, 11.1];
+
 function createCharts(predictions) {
     const days = [1, 2, 3, 4, 5, 6, 7];
 
@@ -221,25 +228,34 @@ function createCharts(predictions) {
 
     // Common chart options
     const commonOptions = {
-        responsive: true, maintainAspectRatio: true, plugins: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
             legend: {
                 labels: {
                     color: textColor
                 }
-            }, title: {
-                display: true, color: textColor, font: {size: 16}
+            },
+            title: {
+                display: true,
+                color: textColor,
+                font: {size: 16}
             }
-        }, scales: {
+        },
+        scales: {
             x: {
                 grid: {
                     color: gridColor
-                }, ticks: {
+                },
+                ticks: {
                     color: textColor
                 }
-            }, y: {
+            },
+            y: {
                 grid: {
                     color: gridColor
-                }, ticks: {
+                },
+                ticks: {
                     color: textColor
                 }
             }
@@ -248,31 +264,61 @@ function createCharts(predictions) {
 
     // Temperature Chart
     charts.temperature = new Chart(document.getElementById('temperature-chart'), {
-        type: 'line', data: {
-            labels: days, datasets: [{
-                label: 'Max Temperature (°C)',
-                data: maxTemps,
-                borderColor: '#e74c3c',
-                backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                tension: 0.3,
-                fill: true
-            }, {
-                label: 'Min Temperature (°C)',
-                data: minTemps,
-                borderColor: '#3498db',
-                backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                tension: 0.3,
-                fill: true
-            }]
-        }, options: {
-            ...commonOptions, plugins: {
-                ...commonOptions.plugins, title: {
-                    ...commonOptions.plugins.title, text: 'Temperature Forecast'
+        type: 'line',
+        data: {
+            labels: days,
+            datasets: [
+                {
+                    label: 'Max Temperature (°C)',
+                    data: maxTemps,
+                    borderColor: '#e74c3c',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Min Temperature (°C)',
+                    data: minTemps,
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Historical Max Temp (°C)',
+                    data: max_tem,
+                    borderColor: '#e74c3c',
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    tension: 0.3
+                },
+                {
+                    label: 'Historical Min Temp (°C)',
+                    data: min_tem,
+                    borderColor: '#3498db',
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    tension: 0.3
                 }
-            }, scales: {
-                ...commonOptions.scales, y: {
-                    ...commonOptions.scales.y, title: {
-                        display: true, text: 'Temperature (°C)', color: textColor
+            ]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                ...commonOptions.plugins,
+                title: {
+                    ...commonOptions.plugins.title,
+                    text: 'Temperature Forecast'
+                }
+            },
+            scales: {
+                ...commonOptions.scales,
+                y: {
+                    ...commonOptions.scales.y,
+                    title: {
+                        display: true,
+                        text: 'Temperature (°C)',
+                        color: textColor
                     }
                 }
             }
@@ -281,24 +327,45 @@ function createCharts(predictions) {
 
     // Humidity Chart
     charts.humidity = new Chart(document.getElementById('humidity-chart'), {
-        type: 'line', data: {
-            labels: days, datasets: [{
-                label: 'Humidity (%)',
-                data: humidities,
-                borderColor: '#2ecc71',
-                backgroundColor: 'rgba(46, 204, 113, 0.1)',
-                tension: 0.3,
-                fill: true
-            }]
-        }, options: {
-            ...commonOptions, plugins: {
-                ...commonOptions.plugins, title: {
-                    ...commonOptions.plugins.title, text: 'Humidity Forecast'
+        type: 'line',
+        data: {
+            labels: days,
+            datasets: [
+                {
+                    label: 'Humidity (%)',
+                    data: humidities,
+                    borderColor: '#2ecc71',
+                    backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Historical Humidity (%)',
+                    data: humidity,
+                    borderColor: '#2ecc71',
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    tension: 0.3
                 }
-            }, scales: {
-                ...commonOptions.scales, y: {
-                    ...commonOptions.scales.y, title: {
-                        display: true, text: 'Humidity (%)', color: textColor
+            ]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                ...commonOptions.plugins,
+                title: {
+                    ...commonOptions.plugins.title,
+                    text: 'Humidity Forecast'
+                }
+            },
+            scales: {
+                ...commonOptions.scales,
+                y: {
+                    ...commonOptions.scales.y,
+                    title: {
+                        display: true,
+                        text: 'Humidity (%)',
+                        color: textColor
                     }
                 }
             }
@@ -307,24 +374,45 @@ function createCharts(predictions) {
 
     // Pressure Chart
     charts.pressure = new Chart(document.getElementById('pressure-chart'), {
-        type: 'line', data: {
-            labels: days, datasets: [{
-                label: 'Pressure (hPa)',
-                data: pressures,
-                borderColor: '#9b59b6',
-                backgroundColor: 'rgba(155, 89, 182, 0.1)',
-                tension: 0.3,
-                fill: true
-            }]
-        }, options: {
-            ...commonOptions, plugins: {
-                ...commonOptions.plugins, title: {
-                    ...commonOptions.plugins.title, text: 'Pressure Forecast'
+        type: 'line',
+        data: {
+            labels: days,
+            datasets: [
+                {
+                    label: 'Pressure (hPa)',
+                    data: pressures,
+                    borderColor: '#9b59b6',
+                    backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Historical Pressure (hPa)',
+                    data: pressure,
+                    borderColor: '#9b59b6',
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    tension: 0.3
                 }
-            }, scales: {
-                ...commonOptions.scales, y: {
-                    ...commonOptions.scales.y, title: {
-                        display: true, text: 'Pressure (hPa)', color: textColor
+            ]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                ...commonOptions.plugins,
+                title: {
+                    ...commonOptions.plugins.title,
+                    text: 'Pressure Forecast'
+                }
+            },
+            scales: {
+                ...commonOptions.scales,
+                y: {
+                    ...commonOptions.scales.y,
+                    title: {
+                        display: true,
+                        text: 'Pressure (hPa)',
+                        color: textColor
                     }
                 }
             }
@@ -333,23 +421,44 @@ function createCharts(predictions) {
 
     // Precipitation Chart
     charts.precipitation = new Chart(document.getElementById('precipitation-chart'), {
-        type: 'bar', data: {
-            labels: days, datasets: [{
-                label: 'Precipitation (mm)',
-                data: precipitations,
-                backgroundColor: '#1abc9c',
-                borderColor: '#16a085',
-                borderWidth: 1
-            }]
-        }, options: {
-            ...commonOptions, plugins: {
-                ...commonOptions.plugins, title: {
-                    ...commonOptions.plugins.title, text: 'Precipitation Forecast'
+        type: 'bar',
+        data: {
+            labels: days,
+            datasets: [
+                {
+                    label: 'Precipitation (mm)',
+                    data: precipitations,
+                    backgroundColor: '#1abc9c',
+                    borderColor: '#16a085',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Historical Precipitation (mm)',
+                    data: precipitation,
+                    backgroundColor: '#2159e8',
+                    borderColor: '#2416a0',
+                    borderWidth: 1
                 }
-            }, scales: {
-                ...commonOptions.scales, y: {
-                    ...commonOptions.scales.y, beginAtZero: true, title: {
-                        display: true, text: 'Precipitation (mm)', color: textColor
+            ]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                ...commonOptions.plugins,
+                title: {
+                    ...commonOptions.plugins.title,
+                    text: 'Precipitation Forecast'
+                }
+            },
+            scales: {
+                ...commonOptions.scales,
+                y: {
+                    ...commonOptions.scales.y,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Precipitation (mm)',
+                        color: textColor
                     }
                 }
             }
@@ -358,24 +467,45 @@ function createCharts(predictions) {
 
     // Wind Chart
     charts.wind = new Chart(document.getElementById('wind-chart'), {
-        type: 'line', data: {
-            labels: days, datasets: [{
-                label: 'Wind Speed (km/h)',
-                data: winds,
-                borderColor: '#f39c12',
-                backgroundColor: 'rgba(243, 156, 18, 0.1)',
-                tension: 0.3,
-                fill: true
-            }]
-        }, options: {
-            ...commonOptions, plugins: {
-                ...commonOptions.plugins, title: {
-                    ...commonOptions.plugins.title, text: 'Wind Speed Forecast'
+        type: 'line',
+        data: {
+            labels: days,
+            datasets: [
+                {
+                    label: 'Wind Speed (km/h)',
+                    data: winds,
+                    borderColor: '#f39c12',
+                    backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Historical Wind Speed (km/h)',
+                    data: wind_speed,
+                    borderColor: '#f39c12',
+                    borderDash: [5, 5],
+                    backgroundColor: 'transparent',
+                    tension: 0.3
                 }
-            }, scales: {
-                ...commonOptions.scales, y: {
-                    ...commonOptions.scales.y, title: {
-                        display: true, text: 'Wind Speed (km/h)', color: textColor
+            ]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                ...commonOptions.plugins,
+                title: {
+                    ...commonOptions.plugins.title,
+                    text: 'Wind Speed Forecast'
+                }
+            },
+            scales: {
+                ...commonOptions.scales,
+                y: {
+                    ...commonOptions.scales.y,
+                    title: {
+                        display: true,
+                        text: 'Wind Speed (km/h)',
+                        color: textColor
                     }
                 }
             }
@@ -384,70 +514,111 @@ function createCharts(predictions) {
 
     // Combined Chart
     charts.combined = new Chart(document.getElementById('combined-chart'), {
-        type: 'line', data: {
-            labels: days, datasets: [{
-                label: 'Max Temp (°C)',
-                data: maxTemps,
-                borderColor: '#e74c3c',
-                backgroundColor: 'rgba(231, 76, 60, 0.1)',
-                tension: 0.3,
-                yAxisID: 'y'
-            }, {
-                label: 'Min Temp (°C)',
-                data: minTemps,
-                borderColor: '#3498db',
-                backgroundColor: 'rgba(52, 152, 219, 0.1)',
-                tension: 0.3,
-                yAxisID: 'y'
-            }, {
-                label: 'Humidity (%)',
-                data: humidities,
-                borderColor: '#2ecc71',
-                backgroundColor: 'rgba(46, 204, 113, 0.1)',
-                tension: 0.3,
-                yAxisID: 'y1'
-            }, {
-                label: 'Wind (km/h)',
-                data: winds,
-                borderColor: '#f39c12',
-                backgroundColor: 'rgba(243, 156, 18, 0.1)',
-                tension: 0.3,
-                yAxisID: 'y2'
-            }]
-        }, options: {
-            ...commonOptions, interaction: {
-                mode: 'index', intersect: false
-            }, plugins: {
-                ...commonOptions.plugins, title: {
-                    ...commonOptions.plugins.title, text: 'Combined Forecast'
+        type: 'line',
+        data: {
+            labels: days,
+            datasets: [
+                {
+                    label: 'Max Temp (°C)',
+                    data: maxTemps,
+                    borderColor: '#e74c3c',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Min Temp (°C)',
+                    data: minTemps,
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y'
+                },
+                {
+                    label: 'Humidity (%)',
+                    data: humidities,
+                    borderColor: '#2ecc71',
+                    backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: 'Wind (km/h)',
+                    data: winds,
+                    borderColor: '#f39c12',
+                    backgroundColor: 'rgba(243, 156, 18, 0.1)',
+                    tension: 0.3,
+                    yAxisID: 'y2'
                 }
-            }, scales: {
+            ]
+        },
+        options: {
+            ...commonOptions,
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            plugins: {
+                ...commonOptions.plugins,
+                title: {
+                    ...commonOptions.plugins.title,
+                    text: 'Combined Forecast'
+                }
+            },
+            scales: {
                 x: {
                     ...commonOptions.scales.x
-                }, y: {
-                    type: 'linear', display: true, position: 'left', title: {
-                        display: true, text: 'Temperature (°C)', color: textColor
-                    }, grid: {
+                },
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Temperature (°C)',
+                        color: textColor
+                    },
+                    grid: {
                         color: gridColor
-                    }, ticks: {
+                    },
+                    ticks: {
                         color: textColor
                     }
-                }, y1: {
-                    type: 'linear', display: true, position: 'right', title: {
-                        display: true, text: 'Humidity (%)', color: textColor
-                    }, grid: {
-                        drawOnChartArea: false, color: gridColor
-                    }, ticks: {
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Humidity (%)',
+                        color: textColor
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                        color: gridColor
+                    },
+                    ticks: {
                         color: textColor
                     }
-                }, y2: {
-                    type: 'linear', display: true, position: 'right', title: {
-                        display: true, text: 'Wind (km/h)', color: textColor
-                    }, grid: {
-                        drawOnChartArea: false, color: gridColor
-                    }, ticks: {
+                },
+                y2: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Wind (km/h)',
                         color: textColor
-                    }, afterFit: function (axis) {
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                        color: gridColor
+                    },
+                    ticks: {
+                        color: textColor
+                    },
+                    afterFit: function (axis) {
                         axis.paddingRight = 50;
                     }
                 }

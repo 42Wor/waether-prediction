@@ -1,6 +1,6 @@
-from Regression import MyLinearRegression, my_train_test_split
+from Polynomial_R import MyPolynomial_R
 
-loaded_model = MyLinearRegression.load('../json/Min_Temp.json')
+loaded_model = MyPolynomial_R.load('../json/Polynomial_R_Min_Temp.json')
 
 # Example prediction using loaded model
 new_data = [[38.8 ,24.0 ,1014.8,0.0  ,14.6]]

@@ -13,7 +13,10 @@
 
 - `Polynomial_R/`  
   Polynomial Regression models and scripts.
-- 
+
+- `Ridge_R/`  
+  Ridge Regression models and scripts.
+
 - **Predicted Features:**  
   - Humidity  
   - Max Temperature  

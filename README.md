@@ -30,7 +30,8 @@ npm install express
 node server.js
 ```
 
-## Regression vs Polynomial Regression
+## Regression vs Polynomial Regression vs Ridge Regression
 
 Polynomial Regression achieved approximately 1% higher accuracy than Linear Regression.
 
+Ridge Regression are score around same higher than Polynomial Regression. but Ridge Regression output same real data 
